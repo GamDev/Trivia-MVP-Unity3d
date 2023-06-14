@@ -11,11 +11,11 @@ public class QuizView : MonoBehaviour
     public List<Transform> optionsTransforms = new List<Transform>();
     public QuizPresenter presenter;
     QuizData quizData;
-
+    int currentQuestionNo = 0;
     void Start()
     {
         DisplayQuestionUI();
-        presenter.GetNextQuestion();
+        presenter.GetNextQuestion(currentQuestionNo);
     }
 
 

@@ -29,9 +29,9 @@ public class QuizPresenter : MonoBehaviour
 
     #region  |  Mehtods  [ Public ]  |
 
-    public void GetNextQuestion()
+    public void GetNextQuestion(int qestionNo)
     {
-        quizModel.GetNextQuestion();
+        quizModel.GetNextQuestion(qestionNo);
     }
   
 

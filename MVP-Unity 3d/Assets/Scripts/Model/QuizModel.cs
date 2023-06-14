@@ -15,7 +15,7 @@ public class QuizModel : ScriptableObject
     // This Event is for questionAnswer. e.g whenever user choose any option this event will be called to update the totalcorrect
     public event Action<int> questionAnswerEvent;
     int totalCorrect;
-    int currentQuestion;
+    int currentQuestion =0;
     #endregion
 
     #region  |  Mehtods  [ Call Backs ]  |
@@ -27,13 +27,13 @@ public class QuizModel : ScriptableObject
     public void Awake()
     {
         totalCorrect = 0;
-        currentQuestion = 0;
+      
     }
 
-    public void GetNextQuestion()
+    public void GetNextQuestion(int nextQ)
     {
-        GetQuestionEvent?.Invoke(quizDatas[currentQuestion]);
-        currentQuestion++;
+        GetQuestionEvent?.Invoke(quizDatas[nextQ]);
+      
     }
    
     #endregion

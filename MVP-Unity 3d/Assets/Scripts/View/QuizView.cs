@@ -8,6 +8,9 @@ public class QuizView : MonoBehaviour
 {
     public Text questionTxt;
     public Text[] optionsTxt;
+    public Sprite correctImage;
+    public Sprite wrongImage;
+    public Image[] resultImages;
     public List<Transform> optionsTransforms = new List<Transform>();
     public QuizPresenter presenter;
     QuizData quizData;
@@ -41,16 +44,43 @@ public class QuizView : MonoBehaviour
            .Append(optionsTransforms[2].DOScale(1, 0.3f).From(0f).SetEase(Ease.OutBack))
            .Append(optionsTransforms[3].DOScale(1, 0.3f).From(0f).SetEase(Ease.OutBack));
     }
+    public void HideQuestionUI()
+    {
+        Sequence mySequence = DOTween.Sequence();
+
+        mySequence.Append(optionsTransforms[3].DOScale(0, 0.3f).SetEase(Ease.OutBack))
+           .Append(optionsTransforms[2].DOScale(0, 0.3f).SetEase(Ease.OutBack))
+           .Append(optionsTransforms[1].DOScale(0, 0.3f).SetEase(Ease.OutBack))
+           .Append(optionsTransforms[0].DOScale(0, 0.3f).SetEase(Ease.OutBack))
+           .PrependInterval(.5f)
+           .Append(questionTxt.transform.parent.transform.DOMoveX(-1000f, 0.5f).From(0f).SetEase(Ease.InSine));
+        DOVirtual.DelayedCall(1.5f, DisplayNextQuestion);
+    }
 
     public void OnOptionButtonClicked(int optNo)
     {
         if (this.quizData.correctAnswer == optNo)
         {
+            resultImages[optNo].sprite = correctImage;
+            resultImages[optNo].transform.DOScale(1f, 0.5f).SetEase(Ease.OutBack);
             Debug.Log(" Correct Question");
         }
         else
         {
+            resultImages[optNo].sprite = wrongImage;
+            resultImages[optNo].transform.DOScale(1f, 0.5f).SetEase(Ease.OutBack);
+            resultImages[this.quizData.correctAnswer].sprite = correctImage;
+            resultImages[this.quizData.correctAnswer].transform.DOScale(1f, 0.5f).SetEase(Ease.OutBack);
+
             Debug.Log(" False");
         }
+        DOVirtual.DelayedCall(1.5f, HideQuestionUI);
+        currentQuestionNo++;
     }
+    public void DisplayNextQuestion()
+    {
+        DisplayQuestionUI();
+        presenter.GetNextQuestion(currentQuestionNo);
+    }
+ 
 }

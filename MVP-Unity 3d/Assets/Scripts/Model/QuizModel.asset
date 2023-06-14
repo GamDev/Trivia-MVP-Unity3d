@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: QuizModel
   m_EditorClassIdentifier: 
   quizDatas:
-  - Question: How to see you
+  - Question: What geometric shape is generally used for stop signs?
     multipleOptions:
-    - Call me
-    - Fuck you
-    - Fuck her
-    - say hi
+    - Triangle
+    - Square
+    - Circle
+    - Octagon
     correctAnswer: 3
-  - Question: How to fuck u
+  - Question: What is "cynophobia"?
     multipleOptions:
-    - Call me to fuck u
-    - Fuck you
-    - Fuck her
-    - say hi
-    correctAnswer: 2
+    - Fear of dogs
+    - Fear of cats
+    - Fear of snakes
+    - Just Fear
+    correctAnswer: 0

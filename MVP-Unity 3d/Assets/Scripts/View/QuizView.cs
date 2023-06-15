@@ -54,6 +54,7 @@ public class QuizView : MonoBehaviour
            .Append(optionsTransforms[0].DOScale(0, 0.3f).SetEase(Ease.OutBack))
            .PrependInterval(.5f)
            .Append(questionTxt.transform.parent.transform.DOMoveX(-1000f, 0.5f).From(0f).SetEase(Ease.InSine));
+        ReScaleResultImages();
         DOVirtual.DelayedCall(1.5f, DisplayNextQuestion);
     }
 
@@ -82,5 +83,11 @@ public class QuizView : MonoBehaviour
         DisplayQuestionUI();
         presenter.GetNextQuestion(currentQuestionNo);
     }
- 
+     public void ReScaleResultImages()
+    {
+        foreach(Image img in resultImages)
+        {
+            img.transform.DOScale(0f, 0f);
+        }
+    }
 }

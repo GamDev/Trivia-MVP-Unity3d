@@ -16,10 +16,16 @@ public class QuizPresenter : MonoBehaviour
 
     void Start()
     {
-        quizModel.GetQuestionEvent += QuizModel_OnChange;
+        quizModel.getNextQuestionEvent += QuizModel_OnNextQuestion;
+        quizModel.totalQuestionEvent += QuizModel_totalQuestionEvent;
     }
 
-    private void QuizModel_OnChange(QuizData quizData)
+    private void QuizModel_totalQuestionEvent(int totalQuestion)
+    {
+        quizView.UpdateQuestionCount(totalQuestion);
+    }
+
+    private void QuizModel_OnNextQuestion(QuizData quizData)
     {
         quizView.UpdateNextQuestion(quizData);
     }
@@ -33,7 +39,11 @@ public class QuizPresenter : MonoBehaviour
     {
         quizModel.GetNextQuestion(qestionNo);
     }
-  
+
+    public void GetTotalQuestions()
+    {
+        quizModel.GetTotalQuestions();
+    }
 
 
     #endregion

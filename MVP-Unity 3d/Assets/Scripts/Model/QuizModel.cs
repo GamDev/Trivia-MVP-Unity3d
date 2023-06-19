@@ -11,11 +11,9 @@ public class QuizModel : ScriptableObject
     // This list contains all the questions with multiple options
     public List<QuizData> quizDatas = new List<QuizData>();
     // This event for Geting new Question. 
-    public event Action<QuizData> GetQuestionEvent;
-    // This Event is for questionAnswer. e.g whenever user choose any option this event will be called to update the totalcorrect
-    public event Action<int> questionAnswerEvent;
-    int totalCorrect;
-    int currentQuestion =0;
+    public event Action<QuizData> getNextQuestionEvent;
+    public event Action<int> totalQuestionEvent;
+
     #endregion
 
     #region  |  Mehtods  [ Call Backs ]  |
@@ -24,18 +22,17 @@ public class QuizModel : ScriptableObject
 
     #region  |  Mehtods  [ Public ]  |
 
-    public void Awake()
-    {
-        totalCorrect = 0;
-      
-    }
 
     public void GetNextQuestion(int nextQ)
     {
-        GetQuestionEvent?.Invoke(quizDatas[nextQ]);
-      
+        getNextQuestionEvent?.Invoke(quizDatas[nextQ]);
     }
-   
+
+    public void GetTotalQuestions()
+    {
+        totalQuestionEvent?.Invoke(quizDatas.Count);
+    }
+
     #endregion
 
     #region  |  Mehtods  [ Private ]  |

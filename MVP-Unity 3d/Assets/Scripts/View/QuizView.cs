@@ -7,6 +7,7 @@ using DG.Tweening;
 public class QuizView : MonoBehaviour
 {
     public Text questionTxt;
+    public Text questionCountTxt;
     public Text[] optionsTxt;
     public Sprite correctImage;
     public Sprite wrongImage;
@@ -15,12 +16,28 @@ public class QuizView : MonoBehaviour
     public QuizPresenter presenter;
     QuizData quizData;
     int currentQuestionNo = 0;
+    int totalCorrect =0;
+    int totalQuestions = 0;
+    public GameObject gameOverPanel;
     void Start()
     {
+        currentQuestionNo = 1;
+        totalCorrect = 0;
         DisplayQuestionUI();
-        presenter.GetNextQuestion(currentQuestionNo);
+        presenter.GetNextQuestion(currentQuestionNo-1);
+        presenter.GetTotalQuestions();
     }
 
+    public void UpdateQuestionCountText()
+    {
+        questionCountTxt.text = currentQuestionNo + "/" + totalQuestions;
+    }
+
+    public void UpdateQuestionCount(int totalQuestions)
+    {
+        this.totalQuestions = totalQuestions;
+        UpdateQuestionCountText();
+    }
 
     public void UpdateNextQuestion(QuizData quizData)
     {
@@ -44,6 +61,7 @@ public class QuizView : MonoBehaviour
            .Append(optionsTransforms[2].DOScale(1, 0.3f).From(0f).SetEase(Ease.OutBack))
            .Append(optionsTransforms[3].DOScale(1, 0.3f).From(0f).SetEase(Ease.OutBack));
     }
+
     public void HideQuestionUI()
     {
         Sequence mySequence = DOTween.Sequence();
@@ -55,6 +73,11 @@ public class QuizView : MonoBehaviour
            .PrependInterval(.5f)
            .Append(questionTxt.transform.parent.transform.DOMoveX(-1000f, 0.5f).From(0f).SetEase(Ease.InSine));
         ReScaleResultImages();
+        if(currentQuestionNo > totalQuestions)
+        {
+            gameOverPanel.SetActive(true);
+            return;
+        }
         DOVirtual.DelayedCall(1.5f, DisplayNextQuestion);
     }
 
@@ -62,9 +85,10 @@ public class QuizView : MonoBehaviour
     {
         if (this.quizData.correctAnswer == optNo)
         {
+            totalCorrect++;
             resultImages[optNo].sprite = correctImage;
             resultImages[optNo].transform.DOScale(1f, 0.5f).SetEase(Ease.OutBack);
-            Debug.Log(" Correct Question");
+           
         }
         else
         {
@@ -72,20 +96,21 @@ public class QuizView : MonoBehaviour
             resultImages[optNo].transform.DOScale(1f, 0.5f).SetEase(Ease.OutBack);
             resultImages[this.quizData.correctAnswer].sprite = correctImage;
             resultImages[this.quizData.correctAnswer].transform.DOScale(1f, 0.5f).SetEase(Ease.OutBack);
-
-            Debug.Log(" False");
         }
         DOVirtual.DelayedCall(1.5f, HideQuestionUI);
         currentQuestionNo++;
     }
+
     public void DisplayNextQuestion()
     {
         DisplayQuestionUI();
-        presenter.GetNextQuestion(currentQuestionNo);
+        UpdateQuestionCountText();
+        presenter.GetNextQuestion(currentQuestionNo-1);
     }
-     public void ReScaleResultImages()
+
+    public void ReScaleResultImages()
     {
-        foreach(Image img in resultImages)
+        foreach (Image img in resultImages)
         {
             img.transform.DOScale(0f, 0f);
         }
